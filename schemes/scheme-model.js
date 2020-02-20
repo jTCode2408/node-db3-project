@@ -23,14 +23,16 @@ function findById(id) {
 //FINDSTEPS(find steps for specific scheme)
 function findSteps(id) {
     return db('steps')
-        .join('schemes', 'schemes.id', 'scheme.scheme_name')
+        .join('steps', 'steps.id', 'scheme.scheme_name', 'steps.scheme_id')
         .select('steps.step_number', 'steps.instructions', 'scheme.id', 'scheme.scheme_name' )
-    .where({'scheme_id': id})
+    .where('steps.scheme_id', id)
 }
 //ADD
 function add(scheme) {
-    return db('schemes').insert(scheme, 'id')
-        // .then(([id]) => get(id));
+    return db('schemes').insert(scheme)
+        .then(id => {
+            return findById(id[0]);
+        })
 }
 //UPDATE
 function update(id, changes) {
