@@ -21,11 +21,11 @@ function findById(id) {
         .first();
 }
 //FINDSTEPS(find steps for specific scheme)
-function findSteps(id) {
-    return db('steps')
-        .join('steps', 'steps.id', 'scheme.scheme_name', 'steps.scheme_id')
-        .select('steps.step_number', 'steps.instructions', 'scheme.id', 'scheme.scheme_name' )
-    .where('steps.scheme_id', id)
+function findSteps(schemeId) {
+    return db('schemes')
+        .join('steps', 'schemes.id', 'steps.scheme_id')
+        .select([{ Id:'schemes.Id',schemeName:'schemes.scheme_name', stepNumber:'steps.step_number', stepInstructions:'steps.instructions'}] )
+    .where('scheme_id', schemeId)
 }
 //ADD
 function add(scheme) {
@@ -35,9 +35,9 @@ function add(scheme) {
         })
 }
 //UPDATE
-function update(id, changes) {
+function update(id,changes) {
     return db('schemes')
-        .where({ id })
+        .where({id} )
         .update({ changes })
 }
 //REMOVE
